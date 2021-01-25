@@ -156,7 +156,9 @@ INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID;";
 					<td>$Shift_ClockOut_Time</td>
 					<td>$Shift_Paycode</td>";
 				}
-				
+				echo "</table";
+			}else{
+				echo "No results";
 			}
 		?>
 		
