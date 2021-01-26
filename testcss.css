@@ -22,7 +22,6 @@ body{
     flex-direction: row;
     flex-wrap: wrap;
     width: 330px;
-	background-color: blue;
 	height: 375px;
 }
 .flex_item_ClockIn{
