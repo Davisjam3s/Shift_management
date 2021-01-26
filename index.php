@@ -50,7 +50,17 @@ if (!$conn)
 				
 			</div>
 			<div class="flex_Container_Item">
-				HEllo
+				<?php
+				
+				echo "Todays date is: ";
+				echo date('d-m-Y');
+				Echo "<br>";
+				echo "Last Sunday Was: ";
+				echo date('d-m-Y', strtotime('last Sunday', strtotime('26-1-2021')));
+				echo "<br>";
+				echo "Next Sunday is: ";
+				echo date('d-m-y', strtotime('next Sunday', strtotime('26-1-2021')));
+				?>
 			</div>
 			
 		</div>
@@ -117,8 +127,7 @@ INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID;";
 					<table>
 					<tr class='Titles'>
 						<th>Shift ID</th>
-						<th>Firstname</th>
-						<th>Surname</th>
+						<th>Name</th>
 						<th>Store</th>
 						<th>Start Date</th>
 						<th>End Date</th>
@@ -127,6 +136,8 @@ INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID;";
 						<th>End Time</th>
 						<th>Clock Out Time</th>
 						<th>Pay Code</th>
+						<th>Shift Length</th>
+						<th>Break Length</th>
 					</tr>
 					";
 				while ($row_Shifts = mysqli_fetch_assoc($result_Shifts))
@@ -142,11 +153,35 @@ INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID;";
 					$Shift_End_Time 		=$row_Shifts["End_Time"];
 					$Shift_ClockOut_Time 	=$row_Shifts["Clocked_Out_Time"];
 					$Shift_Paycode 			=$row_Shifts["Pay_Code_Type"];
+					
+					$Time1 = strtotime($Shift_Start_Time);
+					$Time2 = strtotime($Shift_End_Time);
+					$Shift_Length = round(abs($Time2 - $Time1) / 3600,2);
+					$Break_Length = "";
+					if($Shift_Length <= 4.5){
+						$Break_Length = "No Break";
+					}
+					if($Shift_Length >=4.5 && $Shift_Length <6)
+					{
+						$Break_Length = "15 Mins";
+					}
+					if($Shift_Length >=6 && $Shift_Length <8)
+					{
+						$Break_Length = "20 Mins";
+					}
+					if($Shift_Length >=8 && $Shift_Length <9)
+					{
+						$Break_Length = "30 Mins";
+					}
+					if($Shift_Length > 9)
+					{
+						$Break_Length = "45 Mins";
+					}
+					
 					echo"
 					<tr class=''>
 					<td>$Shift_ID</td>
-					<td>$Shift_Firsname</td>
-					<td>$Shift_Surname</td>
+					<td>$Shift_Firsname $Shift_Surname</td>
 					<td>$Shift_Store_Name</td>
 					<td>$Shift_Start_Day</td>
 					<td>$Shift_End_Day </td>
@@ -154,13 +189,18 @@ INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID;";
 					<td>$Shift_ClockIn_Time</td>
 					<td>$Shift_End_Time</td>
 					<td>$Shift_ClockOut_Time</td>
-					<td>$Shift_Paycode</td>";
+					<td>$Shift_Paycode</td>
+					<td>$Shift_Length Hours</td>
+					<td>$Break_Length</td>
+					";
 				}
 				echo "</table";
+				
 			}else{
 				echo "No results";
 			}
 		?>
+
 		
     </body>
 </html>
