@@ -51,15 +51,10 @@ if (!$conn)
 			</div>
 			<div class="flex_Container_Item">
 				<?php
-				
-				echo "Todays date is: ";
-				echo date('d-m-Y');
-				Echo "<br>";
-				echo "Last Sunday Was: ";
-				echo date('d-m-Y', strtotime('last Sunday', strtotime('26-1-2021')));
-				echo "<br>";
-				echo "Next Sunday is: ";
-				echo date('d-m-y', strtotime('next Sunday', strtotime('26-1-2021')));
+				$date_Current = date('Y/m/d');
+				$Date_Last_Sunday = date('Y/m/d', strtotime('last Sunday', strtotime($date_Current)));
+				$Date_Next_Saturday = date('Y/m/d', strtotime('next saturday', strtotime($date_Current)))  ;
+				echo "Todays date is: $date_Current <br> Week Begining: $Date_Last_Sunday <br> Week Ends: $Date_Next_Saturday ";
 				?>
 			</div>
 			
@@ -118,7 +113,8 @@ if (!$conn)
 			$sql_shifts = "SELECT * FROM shifts
 INNER JOIN users ON shifts.User_ID=users.User_ID
 INNER JOIN stores ON shifts.Store_ID=stores.Store_ID
-INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID;";
+INNER JOIN pay_codes ON shifts.Pay_Code_ID=pay_codes.Pay_Code_ID
+WHERE Start_Time_Date BETWEEN '$Date_Last_Sunday' AND '$Date_Next_Saturday'";
 		
 			$result_Shifts = $result_Shifts = mysqli_query($conn, $sql_shifts);
 			if (mysqli_num_rows($result) > 0)
